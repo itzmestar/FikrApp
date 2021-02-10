@@ -153,6 +153,8 @@ const styles = StyleSheet.create({
     height: 50,
     alignItems: 'center',
     justifyContent: 'center',
+    shadowColor: 'grey',
+    elevation: 8
   },
   buttonTextStyle: {
     color: '#FFFFFF',
