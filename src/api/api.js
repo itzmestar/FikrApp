@@ -7,6 +7,6 @@ export const login = (username, password) => {
         });
 };
 
-export const getItems = (email, password) => {
-  return get(true, '/api/item');
+export const getItems = () => {
+  return get(true, 'api/item');
 };

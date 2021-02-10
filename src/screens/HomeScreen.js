@@ -1,28 +1,26 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { FlatList, StyleSheet, Text, View } from 'react-native';
 import colors from '../config/colors';
 import { getItems } from '../api/api';
 
 function HomeScreen(props) {
-  const itemList = async () => {
+  const [items, setItems] = useState([]);
 
+  useEffect(() => { itemList(); }, []);
+  const itemList = async () => {
+    const result = await getItems();
+    if (result.error) {
+      ToastAndroid.show(result.error, ToastAndroid.SHORT);
+    }
+    if (result.ok) {
+      setItems(result.data);
+    }
   };
     return (
         <View style={styles.container}>
       <FlatList
-        data={[
-          {key: 'Devin'},
-          {key: 'Dan'},
-          {key: 'Dominic'},
-          {key: 'Jackson'},
-          {key: 'James'},
-          {key: 'Joel'},
-          {key: 'John'},
-          {key: 'Jillian'},
-          {key: 'Jimmy'},
-          {key: 'Julie'},
-        ]}
-        renderItem={({item}) => <Text style={styles.item}>{item.key}</Text>}
+        data={items}
+          renderItem={({ item }) => <Text style={styles.item}>{item.item_id} {item.owner} {item.auction_status}</Text>}
       />
     </View>
     );
