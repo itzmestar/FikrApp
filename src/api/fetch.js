@@ -21,6 +21,7 @@ const formatResult = async (result) => {
   const formatted = {
     status: result.status,
     ok: result.ok,
+    error: null,
   };
 
   if (result.ok) {
@@ -30,9 +31,18 @@ const formatResult = async (result) => {
   return formatted;
 };
 
+const formatError = (error) => {
+  const formatted = {
+    status: error,
+    ok: false,
+    error: 'Network Error!',
+  };
+  return formatted;
+}
+
 export const post = async (authenticate, destination, body) => {
   const headers = await getHeaders(authenticate);
-
+  try {
   const result = await fetch(`${API_BASE_URL}${destination}`, {
     method: 'POST',
     headers,
@@ -40,13 +50,17 @@ export const post = async (authenticate, destination, body) => {
     body: JSON.stringify(body),
   });
 
-  const formattedResult = await formatResult(result);
-  return formattedResult;
+    const formattedResult = await formatResult(result);
+    return formattedResult;
+    } catch (error) {
+    console.error(error);
+    return formatError(error);
+  }
 };
 
 export const get = async (authenticate, destination) => {
   const headers = await getHeaders(authenticate);
-
+  try {
   const result = await fetch(`${API_BASE_URL}${destination}`, {
     method: 'GET',
     timeout: 5000,
@@ -54,5 +68,9 @@ export const get = async (authenticate, destination) => {
   });
 
   const formattedResult = await formatResult(result);
-  return formattedResult;
+    return formattedResult;
+    } catch (error) {
+    console.error(error);
+    return formatError(error);
+  }
 };

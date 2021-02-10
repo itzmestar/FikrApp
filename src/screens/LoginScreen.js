@@ -46,12 +46,16 @@ const LoginScreen = ({ navigation }) => {
       ]);
       setSubmitting(false);
       fadeIn();
-      if (result.ok) {
-        console.log("Login success");
-        await setToken(result.data);
-        ToastAndroid.show("Login Successful", ToastAndroid.SHORT);
-        navigation.navigate('Home');
-      } else {
+    if (result.ok) {
+      console.log("Login success");
+      await setToken(result.data);
+      ToastAndroid.show("Login Successful", ToastAndroid.SHORT);
+      navigation.navigate('Home');
+    } else if (result.error) {
+      setErrortext(result.error);
+      ToastAndroid.show(result.error, ToastAndroid.SHORT);
+    }
+    else{
         console.log("Login Failed");
         setErrortext("Login Failed!");
         ToastAndroid.show("Login Failed!", ToastAndroid.SHORT);
@@ -62,7 +66,7 @@ const LoginScreen = ({ navigation }) => {
             <Animated.View style={opacity}>
                 {isSubmitting && (
         <View style={styles.activityIndicatorContainer}>
-          <ActivityIndicator size="large" color="#3F5EFB" />
+          <ActivityIndicator size="large" color="green" />
         </View>
       )}
         <TextInput placeholder="Username"
@@ -85,7 +89,7 @@ const LoginScreen = ({ navigation }) => {
                 {isSubmitting ? (
           <ActivityIndicator size="small" color="#FFFFFF" style={styles.buttonTextStyle} />
         ) : (
-                        <Text style={styles.buttonTextStyle}>LOGIN</Text>
+                        <Text style={styles.buttonTextStyle}>Login</Text>
                         )}
         </TouchableOpacity>
         </View>
@@ -121,7 +125,8 @@ const styles = StyleSheet.create({
         borderColor: 'black',
         backgroundColor: colors.lightGrey,
         color: 'black',
-        fontSize: 20,
+        fontSize: 15,
+        fontFamily: 'Montserrat-Regular',
   },
       
     background: {
@@ -136,29 +141,33 @@ const styles = StyleSheet.create({
         top: 70,
     },
   buttonStyle: {
-    backgroundColor: '#7DE24E',
+    backgroundColor: 'green',
     borderWidth: 0,
     color: '#FFFFFF',
     borderColor: '#7DE24E',
     alignItems: 'center',
     borderRadius: 30,
-    marginTop: 20,
+    marginTop: 10,
     marginBottom: 25,
     width: 300,
-      height: 50,
-    position: 'relative',
+    height: 50,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   buttonTextStyle: {
     color: '#FFFFFF',
     paddingVertical: 10,
-    fontSize: 20,
+    fontSize: 15,
     alignItems: 'center',
+    fontWeight: 'bold',
+    fontFamily: 'Montserrat-Regular',
   },
   errorTextStyle: {
     color: 'red',
     textAlign: 'center',
-    marginTop: 15,
+    marginTop: 10,
     fontSize: 14,
+    fontFamily: 'Montserrat-Regular',
   },
 })
 

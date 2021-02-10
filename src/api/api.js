@@ -1,4 +1,4 @@
-import { post } from './fetch';
+import { post, get } from './fetch';
 
 export const login = (username, password) => {
   return post(false, 'authentication/token/', {
@@ -7,8 +7,6 @@ export const login = (username, password) => {
         });
 };
 
-export const createAccount = (email, password) => {
-  return post('/users', {
-    user: { email, password },
-  });
+export const getItems = (email, password) => {
+  return get(true, '/api/item');
 };
