@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Text, TextInput, View, Button, StyleSheet } from 'react-native';
 import Field from './Field';
-import { validateFields } from './validation';
+import { validateFields, hasValidationError } from './validation';
 import SubmitButton from './SubmitButton';
 
 const getInitialState = (fieldKeys) => {
@@ -13,19 +13,17 @@ const getInitialState = (fieldKeys) => {
   return state;
 };
 
-const Form = ({ fields, buttonText, action, afterSubmit }) => {
+const Form = ({ fields, buttonText, action, afterSubmit}) => {
   const fieldKeys = Object.keys(fields);
   const [values, setValues] = useState(getInitialState(fieldKeys));
   const [errorMessage, setErrorMessage] = useState('');
-  const [validationErrors, setValidationErrors] = useState(
-    getInitialState(fieldKeys),
-  );
+  const [validationErrors, setValidationErrors] = useState(getInitialState(fieldKeys));
 
   const onChangeValue = (key, value) => {
     const newState = { ...values, [key]: value };
     setValues(newState);
 
-  if (validationErrors[key]) {
+    if (validationErrors[key]) {
     const newErrors = { ...validationErrors, [key]: '' };
     setValidationErrors(newErrors);
   }
@@ -44,18 +42,22 @@ const Form = ({ fields, buttonText, action, afterSubmit }) => {
       console.log(errors);
       return setValidationErrors(errors);
     }
+
     try {
       const result = await action(...getValues());
-      await afterSubmit(result);
-    } catch (e) {
+      await afterSubmit(result)
+    } catch(e) {
+      console.log('error:', e);
       setErrorMessage(e.message);
     }
   };
 
   return (
-  <View style={styles.container}>
-    <Text style={styles.error}>{errorMessage}</Text>
+    <View style={styles.container}>
+      <Text style={styles.error}>{errorMessage}</Text>
     {fieldKeys.map((key) => {
+      const field = fields[key];
+      const fieldError = validationErrors[key];
       return (
         <Field
           key={key}
@@ -66,12 +68,11 @@ const Form = ({ fields, buttonText, action, afterSubmit }) => {
           value={values[key]}
         />
       );
-    })}
-    <SubmitButton title={buttonText} onPress={submit} />
-  </View>
-);
-}
-
+    })
+    }
+      <SubmitButton title={buttonText} onPress={submit} />
+    </View>)
+};
 const styles = StyleSheet.create({
   container: {
     flex: 1,

@@ -1,26 +1,20 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import { Text, TextInput, View, StyleSheet } from 'react-native';
 
-/*const Field = ({ fieldName, field, value, onChangeText, error }) => {*/
-class Field extends Component {
-  componentDidUpdate() { }
-  
-  render() {
-    const { fieldName, field, value, onChangeText, error } = this.props;
-    return (
-      <View style={styles.inputContainer}>
-        <Text>{field.label}</Text>
-        <TextInput
-          style={styles.input}
-          {...field.inputProps}
-          value={value}
-          onChangeText={(text) => onChangeText(fieldName, text)}
-        />
-        <Text style={styles.error}>{error}</Text>
-      </View>
-    );
-  }
-}
+const Field = ({ fieldName, field, value, onChangeText, error }) => {
+  return (
+    <View style={styles.inputContainer}>
+      <Text>{field.label}</Text>
+      <TextInput
+        style={styles.input}
+        {...field.inputProps}
+        value={value}
+        onChangeText={(text) => onChangeText(fieldName, text)}
+      />
+      <Text style={styles.error}>{error}</Text>
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
   input: {
@@ -39,7 +33,7 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.23,
     shadowRadius: 2.62,
-    elevation: 4,
+    elevation: 8,
   },
   error: { textAlign: 'center', height: 17.5 },
 });
