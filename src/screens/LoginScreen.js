@@ -7,15 +7,15 @@ import colors from '../config/colors';
 import { setToken } from '../api/token';
 import { DEBUG } from '../config/config';
 
-const LoginScreen = ({ navigation }) => {
+const LoginScreen = (props) => {
     const [username, setUsername] = useState(null);
     const [password, setPassword] = useState(null);
     const [errortext, setErrortext] = useState(null);
     const [opacity] = useState(new Animated.Value(1));
     const [isSubmitting, setSubmitting] = useState(false);
   
-  const animationTimeout = () =>
-    new Promise((resolve) => setTimeout(resolve, 500));
+    const animationTimeout = () =>
+        new Promise((resolve) => setTimeout(resolve, 500));
 
     const fadeOut = () =>
         Animated.timing(opacity, { toValue: 0.2, duration: 200, useNativeDriver: true }).start();
@@ -23,7 +23,7 @@ const LoginScreen = ({ navigation }) => {
     const fadeIn = () =>
         Animated.timing(opacity, { toValue: 1, duration: 200, useNativeDriver: true }).start();
     
-  const loginUser = async () => {
+    const loginUser = async () => {
     if (isSubmitting) {
       return;
     }
@@ -50,7 +50,7 @@ const LoginScreen = ({ navigation }) => {
       console.log("Login success");
       await setToken(result.data);
       ToastAndroid.show("Login Successful", ToastAndroid.SHORT);
-      navigation.navigate('Home');
+      props.navigation.navigate('Home');
     } else if (result.error) {
       setErrortext(result.error);
       ToastAndroid.show(result.error, ToastAndroid.SHORT);
